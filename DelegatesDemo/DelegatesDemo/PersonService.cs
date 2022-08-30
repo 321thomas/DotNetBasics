@@ -11,16 +11,9 @@
             _personRepository = new PersonRepository();
         }
 
-        public IEnumerable<Person> GetPersonsByMinAge(int age)
+        public IEnumerable<Person> GetAllPersons()
         {
-            var currentYear = DateTime.Now.Year;
-            foreach (var person in _personRepository.GetAllPersons())
-            {
-                if (currentYear - person.DateOfBirth.Year >= age)
-                {
-                    yield return person;
-                }
-            }
+            return _personRepository.GetAllPersons();
         }
 
         public IEnumerable<Person> GetPersonsWithLastNameStartingWith(string startingWith)
@@ -41,7 +34,7 @@
         }
 
         // TODO: implement method, WITHOUT(!) any LINQ statements but using delegate as input parameter
-        public IEnumerable<Person> FilterPersons()
+        public IEnumerable<Person> FilterPersons(StringPredicate predicate, string term)
         {
             throw new NotImplementedException();
         }
