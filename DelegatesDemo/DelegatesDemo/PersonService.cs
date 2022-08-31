@@ -1,6 +1,7 @@
 ﻿namespace DelegatesDemo
 {
     public delegate bool StringPredicate(Person p, string s);
+    public delegate bool PersonPredicate(Person p);
 
     public class PersonService
     {
@@ -30,13 +31,36 @@
         // TODO: implement a method that returns all Persons with FirstName starting with parameter of method
         public IEnumerable<Person> GetPersonsWithFirstNameStartingWith(string startingWith)
         {
-            throw new NotImplementedException();
+            foreach (var person in _personRepository.GetAllPersons())
+            {
+                if (person.FirstName.StartsWith(startingWith))
+                {
+                    yield return person;
+                }
+            }
         }
 
         // TODO: implement method, WITHOUT(!) any LINQ statements but using delegate as input parameter
-        public IEnumerable<Person> FilterPersons(StringPredicate predicate, string term)
+        public IEnumerable<Person> FilterPersonsWithStringPredicate(StringPredicate predicate, string term)
         {
-            throw new NotImplementedException();
+            foreach (var person in _personRepository.GetAllPersons())
+            {
+                if (predicate(person, term))
+                {
+                    yield return person;
+                }
+            }
+        }
+
+        public IEnumerable<Person> FilterPersons(PersonPredicate predicate)
+        {
+            foreach (var person in _personRepository.GetAllPersons())
+            {
+                if (predicate(person))
+                {
+                    yield return person;
+                }
+            }
         }
     }
 }
