@@ -1,7 +1,7 @@
 ﻿using DelegatesDemo;
 
 
-// Instanz eines delegates erstellen
+// Create delegate instance
 // .NET 1.0
 TaskDelegate taskDel1 = new TaskDelegate(CreateBackupFile);
 
@@ -15,7 +15,7 @@ TaskDelegate taskDel3 = () =>
     return true;
 };
 
-// Aufruf von RunTask mit delegate, der bestimmt, was tatsächlich ausgeführt werden soll
+// Call method and pass delegate
 RunTask(taskDel1);
 
 
@@ -30,19 +30,15 @@ StringPredicate stringPredicate = (Person p, string term) =>
 };
 
 result = svc.FilterPersonsWithStringPredicate(stringPredicate, "a");
-//PrintResult(result);
 
-// mit allgemeinem delegate, kann auch alle Properties von Person angewendet werden, nicht nur auf string properties
+// with generic delegate, can be applied on all properteis of class Person, not just FirstName
 svc.FilterPersons(p => p.FirstName.Contains("a"));
-//PrintResult(result);
 
 
-// mit extension method (aus Extensions.cs), welche einem .Where von LINQ entspricht
-// als Vergleich https://github.com/dotnet/runtime/blob/main/src/libraries/System.Linq/src/System/Linq/Where.cs
+// with extension method, similar to .Where in LINQ
+// https://github.com/dotnet/runtime/blob/main/src/libraries/System.Linq/src/System/Linq/Where.cs
 result = svc.GetAllPersons().MyWhere(p=> p.FirstName.Contains("a"));
 PrintResult(result);
-
-
 
 
 Console.ReadLine();
@@ -76,6 +72,9 @@ static bool RestartService()
 static void RunTask(TaskDelegate del)// (string taskType)
 {
     var result = false;
+
+    // bad practice if endless if-else
+
     //if (taskType == "backup")
     //{
     //    result = CreateBackupFile();
@@ -85,7 +84,7 @@ static void RunTask(TaskDelegate del)// (string taskType)
     //    result = RestartService();
     //}
 
-    result = del(); // oder del.Invoke();
+    result = del(); // or del.Invoke();
    
     if (result)
     {
@@ -97,7 +96,7 @@ static void RunTask(TaskDelegate del)// (string taskType)
     }
 }
 
-// Demo delegate (muss bei top level statements hier unten stehen)
+// Demo delegate
 delegate bool TaskDelegate();
 
 
